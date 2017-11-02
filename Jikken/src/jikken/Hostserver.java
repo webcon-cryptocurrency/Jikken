@@ -44,10 +44,18 @@ boolean[][] VAL;
 boolean block[][];
 @Override
 public void run() {
-
-	
 	
 	if(excuted){
+		DataB.connect();
+		while(true){
+		block= DataB.vision();
+		repaint();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		}
 	}
 	else{
 		excuted=true;
@@ -71,6 +79,7 @@ public void run() {
 
 	   System.out.println("Ready!");
 	   String str = null;
+	   DataB.connect();
 	   while(true){
 	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	    try{
@@ -224,7 +233,6 @@ while(good.next()){
 
 }
 }
-
 	int sp=8;
 	int score;
 	int life=1;
