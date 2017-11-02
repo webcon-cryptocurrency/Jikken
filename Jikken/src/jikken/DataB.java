@@ -15,28 +15,39 @@ public class DataB {
 	static Statement stmt;
 	static ResultSet rs;
 	static int ID;
+	
+	public static void connect(){
+		try {
+		Class.forName("com.mysql.jdbc.Driver");
+
+		conn=  DriverManager.getConnection("jdbc:mysql://150.95.147.203/pizza?"+
+                                            "user=pizza&password=114514");
+        stmt = conn.createStatement();
+        }
+		catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void main(String[] args){
+	}
 	public static void DeleteDB(){
 		try {
-			Class.forName("org.sqlite.JDBC");
-			/conn =DriverManager.getConnection("jdbc:mysql://localhost/YOUR_DBNAME?"+
-                     "user=USER_ID&password=PASSWORD");
-			stmt = conn.createStatement();
+			
 			stmt.execute("delete from Miner");
 			stmt.execute("delete from Block");
 			String hostAddress = InetAddress.getLocalHost().getHostAddress();
 			stmt.execute( "insert into Miner values (0,0,'"+hostAddress+"')" );
 
-		} catch (SQLException| ClassNotFoundException | UnknownHostException e) {
+		} catch (SQLException| UnknownHostException e) {
 
 		}
 
 	}
 	public static void CreateDB()  {
 		try {
-			//テーブル作成
-			Class.forName("org.sqlite.JDBC");
-			conn = DriverManager.getConnection("jdbc:sqlite:Mining.db");
-			stmt = conn.createStatement();
+			
+			
+			
 			stmt.executeUpdate("create table Miner( ID integer, Belong integer, IP string )" );
 			stmt.executeUpdate("create table Block( Height integer, Belong integer, Nonce string )" );
 			String hostAddress = InetAddress.getLocalHost().getHostAddress();
@@ -51,20 +62,16 @@ public class DataB {
 				System.out.println(rs.getInt("age"));
 			}
 			 */
-		} catch (SQLException | UnknownHostException | ClassNotFoundException e) {
+		} catch (SQLException | UnknownHostException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 	}
 
-
-
 public static int Adminer(String IP,int belong) {
 		try {
 			ID=-2;
-			Class.forName("org.sqlite.JDBC");
-			conn = DriverManager.getConnection("jdbc:sqlite:Mining.db");
-			stmt = conn.createStatement();
+
 			rs = stmt.executeQuery("select max(ID) as maxID from Miner");
 			while(rs.next()) {
 			ID=rs.getInt("maxID")+1;
@@ -73,27 +80,13 @@ public static int Adminer(String IP,int belong) {
 
 		} catch (SQLException  e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			return -200;
-
-		}finally{
-			if(conn != null) {
-				try {
-					//接続を閉じる
-					conn.close();
-				} catch (SQLException e) {
-					// TODO 自動生成された catch ブロック
-					e.printStackTrace();
-				}
-			}
 		}
 		return ID;
 	}
 
 public static int chain(int Height,int belong,String nonce) throws SQLException {
-	conn = DriverManager.getConnection("jdbc:sqlite:Mining.db");
-	stmt = conn.createStatement();
-	//自軍が存在すれば自軍の最大、自軍がなければ全体のさいだい
+
+
 	stmt.execute( "insert into Block values ("+Height+","+belong+",'"+nonce+"')" );
 	boolean opposite;
 	int HosHeight=0;
@@ -110,13 +103,13 @@ public static int chain(int Height,int belong,String nonce) throws SQLException 
 			}
 		if(GoodHeight-HosHeight>4){
 			stmt.execute("delete from Block where belong=2");
-			conn.close();
+	
 			return 0;
 		}
-		conn.close();
+
 		return 1;
 		}
-		conn.close();
+
 		return 2;
 
 	}else{
@@ -132,7 +125,7 @@ public static int chain(int Height,int belong,String nonce) throws SQLException 
 		stmt.execute("delete from Block where belong=1");
 
 		//悪者が勝つ
-		conn.close();
+
 		return 3;
 	}
 	//悪者だけに通知
@@ -147,9 +140,6 @@ public static String[] IPs (){
 	int Howmany=0;
 	String[] a;
 	try {
-		Class.forName("org.sqlite.JDBC");
-		conn = DriverManager.getConnection("jdbc:sqlite:Mining.db");
-		stmt = conn.createStatement();
 		rs = stmt.executeQuery("select max(ID) as maxID from Miner");
 		while(rs.next()) {
 		Howmany=rs.getInt("maxID");
@@ -164,61 +154,35 @@ public static String[] IPs (){
 			}
 			a[0]="";
 		return a;
-	} catch (SQLException | ClassNotFoundException  e) {
+	} catch (SQLException  e) {
 		e.printStackTrace();
-	}finally{
-		if(conn != null) {
-			try {
-				//接続を閉じる
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	return null;
 }
 public static  ResultSet GoodIPs (){
 	try {
-		Class.forName("org.sqlite.JDBC");
-	conn = DriverManager.getConnection("jdbc:sqlite:Mining.db");
-	stmt = conn.createStatement();
-	rs = stmt.executeQuery("select * from Miner where belong=1");
+			rs = stmt.executeQuery("select * from Miner where belong=1");
 	return rs;
-	} catch (ClassNotFoundException | SQLException e) {
+	} catch ( SQLException e) {
 	}
 	return null;
 }
 public static  ResultSet HostileIPs (){
 	try {
-		Class.forName("org.sqlite.JDBC");
-	conn = DriverManager.getConnection("jdbc:sqlite:Mining.db");
-	stmt = conn.createStatement();
+		
 	rs = stmt.executeQuery("select * from Miner where belong=2");
 	return rs;
-	} catch (ClassNotFoundException | SQLException e) {
+	} catch (SQLException e) {
 	}
 	return null;
 }
 public static void Delminer(int ID) {
 	try {
-	Class.forName("org.sqlite.JDBC");
-	conn = DriverManager.getConnection("jdbc:sqlite:Mining.db");
-	stmt = conn.createStatement();
+
 	stmt.execute("delete from Miner where ID="+ID);
 
-	} catch (SQLException | ClassNotFoundException e) {
+	} catch (SQLException e) {
 		e.printStackTrace();
-	}finally{
-		if(conn != null) {
-			try {
-				//接続を閉じる
-				conn.close();
-			} catch (SQLException e) {
-				//
-				e.printStackTrace();
-			}
-		}
 	}
 }
 
@@ -230,21 +194,22 @@ public static boolean[][] vision(){
 		}
 	}
 	try {
-		conn = DriverManager.getConnection("jdbc:sqlite:Mining.db");
-		stmt = conn.createStatement();
+	
+		
+
 		rs = stmt.executeQuery("select * from Block ");
 		while(rs.next()){
 			int B=rs.getInt("Belong");
 			int H=rs.getInt("Height");
 			validated[B-1][H-1]=true;
 		}
-		conn.close();
+
 		return validated;
 	} catch (SQLException e) {
 		e.printStackTrace();
 	}
-	
-	
+
+
 	return null;
 }
 }
