@@ -15,24 +15,25 @@ public class DataB {
 	static Statement stmt;
 	static ResultSet rs;
 	static int ID;
-	
+
 	public static void connect(){
 		try {
-		Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 
-		conn=  DriverManager.getConnection("jdbc:mysql://****/?***"+
-                                            "user=pizza&password=****");
-        stmt = conn.createStatement();
-        }
-		catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
+			conn=  DriverManager.getConnection("jdbc:mysql://150.95.147.203/pizza","pizza","114514");
+	        stmt = conn.createStatement();
+	        }
+			catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
+
 	}
 	public static void main(String[] args){
+
 	}
 	public static void DeleteDB(){
 		try {
-			
+
 			stmt.execute("delete from Miner");
 			stmt.execute("delete from Block");
 			String hostAddress = InetAddress.getLocalHost().getHostAddress();
@@ -45,9 +46,9 @@ public class DataB {
 	}
 	public static void CreateDB()  {
 		try {
-			
-			
-			
+
+
+
 			stmt.executeUpdate("create table Miner( ID integer, Belong integer, IP string )" );
 			stmt.executeUpdate("create table Block( Height integer, Belong integer, Nonce string )" );
 			String hostAddress = InetAddress.getLocalHost().getHostAddress();
@@ -103,7 +104,7 @@ public static int chain(int Height,int belong,String nonce) throws SQLException 
 			}
 		if(GoodHeight-HosHeight>4){
 			stmt.execute("delete from Block where belong=2");
-	
+
 			return 0;
 		}
 
@@ -169,7 +170,7 @@ public static  ResultSet GoodIPs (){
 }
 public static  ResultSet HostileIPs (){
 	try {
-		
+
 	rs = stmt.executeQuery("select * from Miner where belong=2");
 	return rs;
 	} catch (SQLException e) {
@@ -194,13 +195,13 @@ public static boolean[][] vision(){
 		}
 	}
 	try {
-	
-		
 
-		rs = stmt.executeQuery("select * from Block ");
-		while(rs.next()){
-			int B=rs.getInt("Belong");
-			int H=rs.getInt("Height");
+
+		ResultSet VAL;
+		VAL = stmt.executeQuery("select * from Block ");
+		while(VAL.next()){
+			int B=VAL.getInt("Belong");
+			int H=VAL.getInt("Height");
 			validated[B-1][H-1]=true;
 		}
 

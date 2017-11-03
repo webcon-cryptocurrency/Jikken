@@ -32,6 +32,7 @@ public class Clientserver implements Miners {
   hashing.belong=belong;
   hashing.host=host;
   Clientserver server = new Clientserver();
+  DataB.connect();
   try {
    // start RMI server
 	   server.createAndBindRegistry("Miners",server,50000+ID);
