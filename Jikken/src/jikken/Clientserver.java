@@ -32,6 +32,7 @@ public class Clientserver implements Miners {
   hashing.belong=belong;
   hashing.host=host;
   Clientserver server = new Clientserver();
+  DataB.connect();
   try {
    // start RMI server
 	   server.createAndBindRegistry("Miners",server,50000+ID);
@@ -153,7 +154,7 @@ class HashG extends Thread {
 			 a =mining(HAHE);
 			nonce=a[0];
 			hash=a[1];
-			if(hash.substring(0,6).equals("000000")){
+			if(hash.substring(0,5).equals("00000")){
 				mined=true;
 			   running=false;
 	        }
