@@ -264,19 +264,19 @@ while(good.next()){
 		  addMouseMotionListener(this);
 		  size= getSize();
 		  blockamount=20;
-		  back = createImage(1300,700);
+		  back = createImage(1300,900);
 		  buffer = (Graphics2D)back.getGraphics();
 		    block=new boolean[2][blockamount];
 		    blockx=new int[2][blockamount];
 		    blocky=new int[2][blockamount];
 		  for(ret=0;ret<2;ret++){
-				blockrow=70+(blockheight+80)*ret;
+				blockrow=210+(blockheight+80)*ret;
 				blockcounter=0;
 		   for(int j =0;j<10;j++){
 
-			   block[ret][blockcounter]=false;
+			   block[ret][blockcounter]=true;
 			   blocky[ret][blockcounter]=blockrow;
-			   blockx[ret][blockcounter]=j*(blockwidth+40)+100;
+			   blockx[ret][blockcounter]=j*(blockwidth+40)+150;
 			   blockcounter++;
 		   }
 		  }
@@ -296,7 +296,7 @@ while(good.next()){
 	public void  paint(Graphics g){
 		   size= getSize();
 		    buffer.setColor(Color.gray );
-		    buffer.fillRect(0, 0,1300,670);
+		    buffer.fillRect(0, 0,1300,900);
 		    buffer.setColor(Color.black);
 		    buffer.fillRect(0, 0,300,80);
 
@@ -320,18 +320,18 @@ while(good.next()){
 			int[] Int2= new int[4];
 			int[] Int1= new int[4];
 			Int1[0]=90;
-			Int2[0]=100;
+			Int2[0]=150;
 			Int1[1]=90;
-			Int2[1]=620;
+			Int2[1]=800;
 			Int1[2]=1200;
-			Int2[2]=620;
+			Int2[2]=800;
 			Int1[3]=1200;
-			Int2[3]=100;
+			Int2[3]=150;
 			int paramInt=4;
 			buffer.drawPolygon(Int1,Int2, paramInt);
 		    BasicStroke superwideStroke = new BasicStroke(2.0f);
 		    buffer.setStroke(superwideStroke);
-		    buffer.drawLine(90, 360, 1200, 360);
+		    buffer.drawLine(90, 475, 1200, 475);
 	    	buffer.drawString(Mx+","+My, Mx, My);
 		    g.drawImage(back, 0, 0, this);
 	}
