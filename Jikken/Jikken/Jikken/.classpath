@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/Volumes/home/hz130117sa/win/My Documents/mysql-connector-java-5.1.44-bin.jar"/>
-	<classpathentry kind="lib" path="/Volumes/home/hz130117sa/win/My Documents/sqlite-jdbc-3.20.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/すすむ/Downloads/pleiades-e4.5-java_20151002/pleiades/eclipse/path/mysql-connector-java-5.1.44-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

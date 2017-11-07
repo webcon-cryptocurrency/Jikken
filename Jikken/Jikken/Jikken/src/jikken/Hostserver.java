@@ -1,8 +1,11 @@
 package jikken;
 import java.applet.Applet;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,11 +27,11 @@ import java.sql.SQLException;
 public class Hostserver  extends Applet implements MouseMotionListener, MouseListener,Block,Runnable {
 
  /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 /**
-	 * 
+	 *
 	 */
 /**
 	 *
@@ -37,14 +40,14 @@ public class Hostserver  extends Applet implements MouseMotionListener, MouseLis
   * @param args
   */
   //
- 
+
 static DataB host = new DataB();
 boolean[][] VAL;
 
 boolean block[][];
 @Override
 public void run() {
-	
+
 	if(excuted){
 		DataB.connect();
 		while(true){
@@ -103,7 +106,7 @@ public void run() {
    e.printStackTrace();
   }
  }
-	
+
 }
 
 
@@ -247,20 +250,22 @@ while(good.next()){
 	int blockamount;
 	int ret=0;
 	int blockrow=20;
+	Font fo1 ;
 	 Dimension size;
-	 Graphics buffer;
+	  Graphics2D buffer;
 	 Image back;
 
 	 Thread kicker = null;
 	 Thread checker =null;
 
 	public void init(){
+		fo1=new Font("Dialog",Font.BOLD,25);
 	    addMouseListener(this);
 		  addMouseMotionListener(this);
 		  size= getSize();
 		  blockamount=20;
-		  back = createImage(1000,800);
-		  buffer = back.getGraphics();
+		  back = createImage(1300,700);
+		  buffer = (Graphics2D)back.getGraphics();
 		    block=new boolean[2][blockamount];
 		    blockx=new int[2][blockamount];
 		    blocky=new int[2][blockamount];
@@ -290,8 +295,15 @@ while(good.next()){
 
 	public void  paint(Graphics g){
 		   size= getSize();
-		    buffer.setColor(Color.BLACK );
-		    buffer.fillRect(0, 0,1000,800);
+		    buffer.setColor(Color.gray );
+		    buffer.fillRect(0, 0,1300,670);
+		    buffer.setColor(Color.black);
+		    buffer.fillRect(0, 0,300,80);
+
+		    buffer.setFont(fo1);
+		    buffer.drawString("善良ノード数:", 300, 50);
+		    buffer.drawString("攻撃者ノード数:", 600, 50);
+		    buffer.drawString("現在のブロック数:", 900, 50);
 		    for(ret=0;ret<2;ret++){
 			for(blockcounter=0;blockcounter<blockamount;blockcounter++){
 				if(block[ret][blockcounter]){
@@ -305,9 +317,21 @@ while(good.next()){
 				}
 			}
 		    buffer.setColor(Color.green);
-			buffer.drawLine(0, 300, 1000, 300);
-	    	buffer.setColor(Color.green);
-
+			int[] Int2= new int[4];
+			int[] Int1= new int[4];
+			Int1[0]=90;
+			Int2[0]=100;
+			Int1[1]=90;
+			Int2[1]=620;
+			Int1[2]=1200;
+			Int2[2]=620;
+			Int1[3]=1200;
+			Int2[3]=100;
+			int paramInt=4;
+			buffer.drawPolygon(Int1,Int2, paramInt);
+		    BasicStroke superwideStroke = new BasicStroke(2.0f);
+		    buffer.setStroke(superwideStroke);
+		    buffer.drawLine(90, 360, 1200, 360);
 	    	buffer.drawString(Mx+","+My, Mx, My);
 		    g.drawImage(back, 0, 0, this);
 	}
@@ -320,6 +344,8 @@ while(good.next()){
 	  boolean CHECK = false;
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
+
+	/*
 		if(excuted&&!CHECK){
 			checker = new Thread(this);
 			checker.start();
@@ -328,8 +354,9 @@ while(good.next()){
 	kicker = new Thread(this);
 	kicker.start();
 	}
+	*/
 		}
-	
+
 
 
 	@Override

@@ -16,7 +16,7 @@ public class RMIClient {
 	static Clientserver server;
  public static void main(String[] args) throws UnknownHostException {
   server = new Clientserver();
-  String host ="133.72.156.32";
+  String host ="169.254.136.172";
   int belong = Integer.parseInt("1");
   int port = 50000;
   try {
@@ -45,5 +45,4 @@ public class RMIClient {
 
   }
  }
-
 }
