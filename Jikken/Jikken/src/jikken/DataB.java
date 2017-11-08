@@ -19,7 +19,7 @@ public class DataB {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
-			conn=  DriverManager.getConnection("jdbc:mysql://********/****","*****","****");
+			conn=  DriverManager.getConnection("jdbc:mysql://auri.ga/pizza","pizza","114514");
 	        stmt = conn.createStatement();
 	        }
 			catch (ClassNotFoundException | SQLException e) {
@@ -129,11 +129,10 @@ public static int chain(int Height,int belong,String nonce) throws SQLException 
 		return 3;
 	}
 	//悪者だけに通知
-	conn.close();
 	return 4;
 	}
 	}
-	conn.close();
+
 	return 5;
 }
 public static String[] IPs (){
@@ -187,7 +186,7 @@ public static void Delminer(int ID) {
 }
 
 public static boolean[][] vision(){
-	boolean[][] validated = new boolean[2][20];
+	boolean[][] validated = new boolean[2][52];
 	for(int i =0;i<2;i++){
 		for(int j =0;j<2;j++){
 			validated[i][j]=false;
@@ -198,18 +197,31 @@ public static boolean[][] vision(){
 
 		ResultSet VAL;
 		VAL = stmt.executeQuery("select * from Block ");
+		int B;
+		int H;
 		while(VAL.next()){
-			int B=VAL.getInt("Belong");
-			int H=VAL.getInt("Height");
+			 B=VAL.getInt("Belong");
+			 H=VAL.getInt("Height");
 			validated[B-1][H-1]=true;
 		}
 
 		return validated;
 	} catch (SQLException e) {
-		e.printStackTrace();
+	 return vision();
 	}
+}
 
-
-	return null;
+public int[] HMM(){
+	int[] a = new int[2];
+	try {
+		rs = stmt.executeQuery("select max(ID) as maxID from Miner");
+		while(rs.next()) {
+		a[0]=rs.getInt("maxID");
+		}
+		
+	} catch (SQLException e) {
+		
+	}
+	return a;
 }
 }

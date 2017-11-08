@@ -243,7 +243,7 @@ while(good.next()){
 	int My=0;
 
 
-	int blockheight=40,blockwidth=40;
+	int blockheight=40,blockwidth=20;
 	int blockcounter=0;
 	int blockx[][];
 	int blocky[][];
@@ -263,7 +263,7 @@ while(good.next()){
 	    addMouseListener(this);
 		  addMouseMotionListener(this);
 		  size= getSize();
-		  blockamount=20;
+		  blockamount=52;
 		  back = createImage(1300,900);
 		  buffer = (Graphics2D)back.getGraphics();
 		    block=new boolean[2][blockamount];
@@ -272,21 +272,21 @@ while(good.next()){
 		  for(ret=0;ret<2;ret++){
 				blockrow=210+(blockheight+80)*ret;
 				blockcounter=0;
-		   for(int j =0;j<10;j++){
+		   for(int j =0;j<26;j++){
 
-			   block[ret][blockcounter]=true;
+			   block[ret][blockcounter]=false;
 			   blocky[ret][blockcounter]=blockrow;
-			   blockx[ret][blockcounter]=j*(blockwidth+40)+150;
+			   blockx[ret][blockcounter]=j*(blockwidth+20)+130;
 			   blockcounter++;
 		   }
 		  }
 		  for(ret=0;ret<2;ret++){
-				blockrow=370+(blockheight+80)*ret;
-				blockcounter=10;
-		   for(int j =0;j<10;j++){
+				blockrow=550+(blockheight+80)*ret;
+				blockcounter=26;
+		   for(int j =0;j<26;j++){
 			   block[ret][blockcounter]=false;
 			   blocky[ret][blockcounter]=blockrow;
-			   blockx[ret][blockcounter]=j*(blockwidth+40)+100;
+			   blockx[ret][blockcounter]=j*(blockwidth+20)+130;
 			   blockcounter++;
 		   }
 		  }
@@ -304,6 +304,7 @@ while(good.next()){
 		    buffer.drawString("善良ノード数:", 300, 50);
 		    buffer.drawString("攻撃者ノード数:", 600, 50);
 		    buffer.drawString("現在のブロック数:", 900, 50);
+		    blockcounter=0;
 		    for(ret=0;ret<2;ret++){
 			for(blockcounter=0;blockcounter<blockamount;blockcounter++){
 				if(block[ret][blockcounter]){
@@ -345,8 +346,9 @@ while(good.next()){
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 
-	/*
+	
 		if(excuted&&!CHECK){
+			System.out.println("aaaaa");
 			checker = new Thread(this);
 			checker.start();
 			CHECK=true;
@@ -354,7 +356,7 @@ while(good.next()){
 	kicker = new Thread(this);
 	kicker.start();
 	}
-	*/
+	
 		}
 
 
