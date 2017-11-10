@@ -124,8 +124,6 @@ public static int chain(int Height,int belong,String nonce) throws SQLException 
 	if(HosHeight-GoodHeight>4){
 		stmt.execute("delete from Block where belong=1");
 
-		//悪者が勝つ
-
 		return 3;
 	}
 	//悪者だけに通知
@@ -211,16 +209,25 @@ public static boolean[][] vision(){
 	}
 }
 
-public int[] HMM(){
-	int[] a = new int[2];
+public static int[] HMM(){
+	int[] a = new int[3];
 	try {
-		rs = stmt.executeQuery("select max(ID) as maxID from Miner");
+		
+		rs = stmt.executeQuery("select count(*) as maxID from Miner where belong=1");
 		while(rs.next()) {
 		a[0]=rs.getInt("maxID");
 		}
+		rs = stmt.executeQuery("select count(*) as maxID from Miner where belong=2");
+		while(rs.next()) {
+			a[1]=rs.getInt("maxID");
+			}
+		rs = stmt.executeQuery("select max(Height) as maxID from Block");
+		while(rs.next()) {
+			a[2]=rs.getInt("maxID");
+		}
 		
 	} catch (SQLException e) {
-		
+		e.printStackTrace();
 	}
 	return a;
 }

@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -11,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
@@ -26,16 +28,9 @@ import java.sql.SQLException;
 
 public class Hostserver  extends Applet implements MouseMotionListener, MouseListener,Block,Runnable {
 
- /**
-	 *
-	 */
+
 	private static final long serialVersionUID = 1L;
-/**
-	 *
-	 */
-/**
-	 *
-	 */
+
 /**
   * @param args
   */
@@ -43,18 +38,23 @@ public class Hostserver  extends Applet implements MouseMotionListener, MouseLis
 
 static DataB host = new DataB();
 boolean[][] VAL;
-
+int Z,H,M;
+int[] a= new int[3];
 boolean block[][];
 @Override
 public void run() {
-
+	
 	if(excuted){
 		DataB.connect();
 		while(true){
 		block= DataB.vision();
+		a=DataB.HMM();
+		Z=a[0];
+		H=a[1];
+		M=a[2];
 		repaint();
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -236,11 +236,6 @@ while(good.next()){
 
 }
 }
-	int sp=8;
-	int score;
-	int life=1;
-	int Mx=0;
-	int My=0;
 
 
 	int blockheight=40,blockwidth=20;
@@ -250,16 +245,43 @@ while(good.next()){
 	int blockamount;
 	int ret=0;
 	int blockrow=20;
-	Font fo1 ;
+	Image img;
+	Font font ;
 	 Dimension size;
 	  Graphics2D buffer;
 	 Image back;
 
 	 Thread kicker = null;
 	 Thread checker =null;
+		int[] Int2= new int[4];
+		int[] Int1= new int[4];
 
+		
+		 
 	public void init(){
-		fo1=new Font("Dialog",Font.BOLD,25);
+	System.out.println(getCodeBase());
+	img = getImage(getCodeBase(), "../logo.png");
+	
+		try{
+			a[0]=0;
+			a[1]=0;
+			a[2]=0;
+			Int1[0]=90;
+			Int2[0]=150;
+			Int1[1]=90;
+			Int2[1]=800;
+			Int1[2]=1200;
+			Int2[2]=800;
+			Int1[3]=1200;
+			Int2[3]=150;
+			
+			  font = Font.createFont(Font.TRUETYPE_FONT,new File("../font/Koruri-Regular.ttf"));
+			  font = font.deriveFont(3, 20.0f);
+			}catch(FontFormatException e){
+			  System.out.println("形式がフォントではありません。");
+			}catch(IOException e){
+			  System.out.println("入出力エラーでフォントを読み込むことができませんでした。");
+			}
 	    addMouseListener(this);
 		  addMouseMotionListener(this);
 		  size= getSize();
@@ -295,15 +317,16 @@ while(good.next()){
 
 	public void  paint(Graphics g){
 		   size= getSize();
+		   
 		    buffer.setColor(Color.gray );
 		    buffer.fillRect(0, 0,1300,900);
 		    buffer.setColor(Color.black);
 		    buffer.fillRect(0, 0,300,80);
-
-		    buffer.setFont(fo1);
-		    buffer.drawString("善良ノード数:", 300, 50);
-		    buffer.drawString("攻撃者ノード数:", 600, 50);
-		    buffer.drawString("現在のブロック数:", 900, 50);
+		    
+		    buffer.setFont(font);
+		    buffer.drawString("善良ノード数:"+Z, 300, 50);
+		    buffer.drawString("攻撃者ノード数:"+H, 600, 50);
+		    buffer.drawString("現在のブロック数:"+M, 900, 50);
 		    blockcounter=0;
 		    for(ret=0;ret<2;ret++){
 			for(blockcounter=0;blockcounter<blockamount;blockcounter++){
@@ -318,22 +341,14 @@ while(good.next()){
 				}
 			}
 		    buffer.setColor(Color.green);
-			int[] Int2= new int[4];
-			int[] Int1= new int[4];
-			Int1[0]=90;
-			Int2[0]=150;
-			Int1[1]=90;
-			Int2[1]=800;
-			Int1[2]=1200;
-			Int2[2]=800;
-			Int1[3]=1200;
-			Int2[3]=150;
-			int paramInt=4;
-			buffer.drawPolygon(Int1,Int2, paramInt);
+			
+			
+			buffer.drawPolygon(Int1,Int2, 4);
 		    BasicStroke superwideStroke = new BasicStroke(2.0f);
 		    buffer.setStroke(superwideStroke);
 		    buffer.drawLine(90, 475, 1200, 475);
-	    	buffer.drawString(Mx+","+My, Mx, My);
+		    buffer.drawImage(img, 0, 0,300,80, this);
+	    	
 		    g.drawImage(back, 0, 0, this);
 	}
 
@@ -393,9 +408,7 @@ while(good.next()){
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-	Mx=e.getPoint().x;
-	My=e.getPoint().y;
-	repaint();
+
 		}
 
 
