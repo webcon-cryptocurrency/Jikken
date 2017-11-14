@@ -9,5 +9,6 @@ public interface Miners extends Remote {
 	public void Restart(int Height) throws RemoteException;
 	public boolean Stand(int id,int belong,String host)throws RemoteException;
 	public void Stophash() throws RemoteException;
+	public void exit() throws RemoteException;
 
 }

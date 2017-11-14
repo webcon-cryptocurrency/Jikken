@@ -98,6 +98,12 @@ public void Restart(int Height) throws RemoteException {
 	hashing.running=true;
 }
 
+@Override
+public void exit() throws RemoteException {
+	System.exit(0);
+	
+}
+
 
 }
 
