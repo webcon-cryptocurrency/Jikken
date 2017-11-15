@@ -21,28 +21,15 @@ public class Hostserver  implements Block {
   //
 
 static DataB host = new DataB();
-boolean[][] VAL;
-int Z,H,M;
-int[] a= new int[3];
-boolean block[][];
+
+
 public static void main(String[] args) {
 	
   Hostserver server = new Hostserver();
   try {
-   System.out.println("------ Info -------");
 
    String hostAddress = InetAddress.getLocalHost().getHostAddress();
    System.out.println("Host Address(A)  : " + hostAddress);
-   System.out.println("ServerHostName(B): " + System.getProperties().getProperty(
-       "java.rmi.server.hostname"));
-   System.out.println("Host Name(C)     : " + InetAddress.getLocalHost().getHostName());
-   System.out.println("Host FQDN(C)     : " + InetAddress.getByName(hostAddress).getHostName());
-//   System.out.println("LocalHostName?: " + System.getProperties().getProperty(
-      // "java.rmi.server.useLocalHostName"));
-
-
-   // start RMI server
-
 	   server.createAndBindRegistry("Block",server,50000);
 
 	   System.out.println("Ready!");
@@ -57,12 +44,10 @@ public static void main(String[] args) {
 	    }
 	    if(str.equals("Start")){
 	    beginmine();
-	    }else if(str.equals("DB")){
-	    	DataB.CreateDB();
 	    }else if(str.equals("DL")){
 	    	DataB.DeleteDB();
 	    }
-	   }
+	 }
   } catch (RemoteException e) {
    e.printStackTrace();
   } catch (AlreadyBoundException e) {
@@ -97,7 +82,6 @@ public static void main(String[] args) {
  MinerIPs=DataB.IPs();
  for(int j=0;j<MinerIPs.length;j++){
 if(MinerIPs[j].isEmpty()){
-	
 }
 else{
 	Registry registry;
@@ -144,9 +128,10 @@ public boolean TATETA(int ID,String IP) throws RemoteException {
 
 @Override
 public void hashed(int Height,int belong,String nonce) throws RemoteException, SQLException {
-DataB.chain(Height,belong,nonce);
-if(Height>=150){
-	Registry registry;
+int A=DataB.chain(Height,belong,nonce);
+Registry registry;
+if(Height>=10){
+
 	 for(int j=0;j<MinerIPs.length;j++){
 		 
 		 if(MinerIPs[j].isEmpty()){}
@@ -155,7 +140,6 @@ if(Height>=150){
 		 		registry = LocateRegistry.getRegistry(MinerIPs[j], 50000+j);
 		 		Miners stub = (Miners) registry.lookup("Miners");
 		 		stub.exit();
-		 		
 		 	} catch (RemoteException | NotBoundException e) {
 		 	}
 
@@ -163,13 +147,52 @@ if(Height>=150){
 		  }
 System.exit(0);	
 }
-System.out.println("hashed!");
-Registry registry;
+else{
+System.out.println(belong+"が"+Height+"番目のブロックを掘り出しました");
+
+Nods[] Go=DataB.GoodIPs();
+Nods[]Ho=DataB.HostileIPs();
+
+if(A==1){
+int ID;
+String IP;
+
+for(int j=0;j<Go.length;j++){
+	ID=Go[j].ID;
+	IP=Go[j].IP;
+		registry = LocateRegistry.getRegistry(IP, 50000+ID);
+		Miners stub;
+		try {
+			stub = (Miners) registry.lookup("Miners");
+			stub.Stophash();
+			stub.Restart(Height+1);
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
+}
+}else if(A==4){
+	int ID;
+	String IP;
+
+	for(int k=0;k<Ho.length;k++){
+		ID=Ho[k].ID;
+		IP=Ho[k].IP;
+			registry = LocateRegistry.getRegistry(IP, 50000+ID);
+			Miners stub;
+			try {
+				stub = (Miners) registry.lookup("Miners");
+				stub.Stophash();
+				stub.Restart(Height+1);
+			} catch (NotBoundException e) {
+				e.printStackTrace();
+			}
+
+	}
+}else{
+
 	 for(int j=0;j<MinerIPs.length;j++){
-		 
 		 if(MinerIPs[j].isEmpty()){}
 		 else{
-		 	
 		 	try {
 		 		registry = LocateRegistry.getRegistry(MinerIPs[j], 50000+j);
 		 		Miners stub = (Miners) registry.lookup("Miners");
@@ -183,5 +206,10 @@ Registry registry;
 		  }
 
 }
-
 }
+}
+}
+
+
+
+

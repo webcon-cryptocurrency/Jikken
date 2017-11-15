@@ -17,8 +17,9 @@ public class RMIClient {
  public static void main(String[] args) throws UnknownHostException {
   server = new Clientserver();
   String host ="133.72.156.32";
-  int belong = Integer.parseInt(args[0]);
+  int belong = Integer.parseInt("2");
   int port = 50000;
+  
   try {
    Registry registry = LocateRegistry.getRegistry(host, port);
    Block stub = (Block) registry.lookup("Block");

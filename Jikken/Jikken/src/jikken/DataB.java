@@ -27,9 +27,22 @@ public class DataB {
 			}
 
 	}
-	public static void main(String[] args){
+	
+	public void C(){
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+
+			conn=  DriverManager.getConnection("jdbc:mysql://auri.ga/pizza","pizza","114514");
+	        stmt = conn.createStatement();
+	        }
+			catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
 
 	}
+	
+	
+
 	public static void DeleteDB(){
 		try {
 
@@ -43,31 +56,13 @@ public class DataB {
 		}
 
 	}
-	public static void CreateDB()  {
-		try {
-
-
-
-			stmt.executeUpdate("create table Miner( ID integer, Belong integer, IP string )" );
-			stmt.executeUpdate("create table Block( Height integer, Belong integer, Nonce string )" );
-			String hostAddress = InetAddress.getLocalHost().getHostAddress();
-			stmt.execute( "insert into Miner values (0,0,'"+hostAddress+"')" );
-			//値を入力する
-			//stmt.execute( "insert into Miner values (1,0,'0')" );
-
-			//結果を表示する
-			/*rs = stmt.executeQuery("select * from test1");
-			while(rs.next()) {
-				System.out.println(rs.getString("name"));
-				System.out.println(rs.getInt("age"));
-			}
-			 */
-		} catch (SQLException | UnknownHostException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
+public void closeSQL(){
+	try {
+		conn.close();
+	} catch (SQLException e) {
+		e.printStackTrace();
 	}
-
+}
 public static int Adminer(String IP,int belong) {
 		try {
 			ID=-2;
@@ -156,19 +151,46 @@ public static String[] IPs (){
 	}
 	return null;
 }
-public static  ResultSet GoodIPs (){
+public static  Nods[] GoodIPs (){
 	try {
-			rs = stmt.executeQuery("select * from Miner where belong=1");
-	return rs;
+		Nods[] Good;
+		rs = stmt.executeQuery("select count(*) as maxID from Miner where belong=1");
+		if(rs.next()) {
+		Good = new Nods[rs.getInt("maxID")];
+		}else{
+		Good = new Nods[0];
+		}
+	rs = stmt.executeQuery("select * from Miner where belong=1");
+	int i=0;
+	while(rs.next()) {
+		Good[i]=new Nods();
+		Good[i].setnods(rs.getInt("ID"), rs.getString("IP"));
+		i++;
+	}
+	return Good;
+
+
 	} catch ( SQLException e) {
 	}
 	return null;
 }
-public static  ResultSet HostileIPs (){
+public static  Nods[] HostileIPs (){
 	try {
-
+		Nods[] Hostile;
+		rs = stmt.executeQuery("select count(*) as maxID from Miner where belong=2");
+		if(rs.next()) {
+		Hostile = new Nods[rs.getInt("maxID")];
+		}else{
+		Hostile = new Nods[0];
+		}
 	rs = stmt.executeQuery("select * from Miner where belong=2");
-	return rs;
+	int i=0;
+	while(rs.next()) {
+		Hostile[i]=new Nods();
+		Hostile[i].setnods(rs.getInt("ID"), rs.getString("IP"));
+		i++;
+	}
+	return Hostile;
 	} catch (SQLException e) {
 	}
 	return null;
@@ -230,5 +252,13 @@ public static int[] HMM(){
 		e.printStackTrace();
 	}
 	return a;
+}
+}
+class Nods{
+int ID;
+String IP;
+public void setnods(int Id,String Ip){
+	ID=Id;
+	IP=Ip;
 }
 }
